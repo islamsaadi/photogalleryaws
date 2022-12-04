@@ -1,9 +1,5 @@
 version: '3'
 
-networks:
-  laravel:
-    driver: bridge
-
 services:
   site:
     image: nginx:stable-alpine
@@ -18,9 +14,6 @@ services:
   mysql:
     image: mysql:5.7
     restart: unless-stopped
-    tty: true
-    ports:
-      - "3306"
     environment:
       MYSQL_DATABASE: homestead
       MYSQL_USER: homestead
@@ -28,8 +21,6 @@ services:
       MYSQL_ROOT_PASSWORD: secret
       SERVICE_TAGS: dev
       SERVICE_NAME: mysql
-    networks:
-      - laravel
   
   phpmyadmin:
     image: phpmyadmin/phpmyadmin:latest
