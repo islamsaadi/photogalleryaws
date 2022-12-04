@@ -44,7 +44,9 @@ pipeline {
                 sh 'cp ./src/.env.example ./src/.env'
                 sh 'docker compose run --rm artisan key:generate'
                 sh 'cat ./src/.env'
+                sh 'docker compose run --rm artisan cache:clear'
                 sh 'docker compose run --rm artisan config:clear'
+                 sh 'cat ./src/.env'
                 sh 'docker compose run --rm artisan migrate'
                 sh 'docker compose run --rm artisan storage:link'
             }
