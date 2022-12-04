@@ -20,6 +20,7 @@ pipeline {
             steps {
                 script {
                     try {
+                        sh 'docker system prune -a'
                         sh 'docker rm -f $(docker ps -a -q)'
                     } catch (Exception e) {
                         echo 'No running container to clear up...'
