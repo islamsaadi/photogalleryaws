@@ -55,8 +55,8 @@ pipeline {
                 sh 'docker compose run --rm artisan key:generate'
                 sh 'echo ${DB_USERNAME}'
                 sh 'cat ./src/.env'
-                sh 'docker-compose exec php php artisan migrate'
-                sh 'docker-compose exec php php artisan storage:link'
+                sh 'docker compose run --rm artisan migrate'
+                sh 'docker compose run --rm artisan storage:link'
             }
         }              
         stage("Run Tests") {
