@@ -42,6 +42,7 @@ pipeline {
         stage("Run laravel artisans") {            
             steps {
                 sh 'cp ./src/.env.example ./src/.env'
+                sh 'chmod -R 775 ./src/storage'
                 sh 'docker compose run --rm artisan key:generate'
                 sh 'cat ./src/.env'
                 sh 'docker compose run --rm artisan cache:clear'
