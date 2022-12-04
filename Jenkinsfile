@@ -40,8 +40,18 @@ pipeline {
             }
         }
         stage("Run laravel artisans") {
+            environment {
+                DB_HOST = credentials("laravel-db-host")
+                DB_DATABASE = credentials("laravel-database")
+                DB_USERNAME = credentials("laravel-db-user")
+                DB_PASSWORD = credentials("laravel-db-password")
+            }
             steps {
                 sh 'cp ./src/.env.example ./src/.env'
+                sh 'echo DB_HOST=${DB_HOST} >> ./src/.env'
+                sh 'echo DB_USERNAME=${DB_USERNAME} >> ./src/.env'
+                sh 'echo DB_DATABASE=${DB_DATABASE} >> ./src/.env'
+                sh 'echo DB_PASSWORD=${DB_PASSWORD} >> ./src/.env'
                 sh 'docker compose run --rm artisan key:generate'
                 sh 'docker compose run --rm artisan migrate'
                 sh 'docker compose run --rm artisan storage:link'
