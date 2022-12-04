@@ -39,17 +39,10 @@ pipeline {
                 sh 'docker compose run --rm composer install'
             }
         }
-        stage("Run laravel artisans") {
-            environment {
-                DB_HOST = credentials("laravel-db-host")
-                DB_DATABASE = credentials("laravel-database")
-                DB_USERNAME = credentials("laravel-db-user")
-                DB_PASSWORD = credentials("laravel-db-password")
-            }
+        stage("Run laravel artisans") {            
             steps {
                 sh 'cp ./src/.env.example ./src/.env'
                 sh 'docker compose run --rm artisan key:generate'
-                sh 'echo ${DB_USERNAME}'
                 sh 'cat ./src/.env'
                 sh 'docker compose run --rm artisan config:clear'
                 sh 'docker compose run --rm artisan migrate'
