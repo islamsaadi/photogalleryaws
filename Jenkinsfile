@@ -10,6 +10,7 @@ pipeline {
 	    stage("Verify tooling") {
             steps {
                 sh '''
+                    whoami
                     docker info
                     docker version
                     docker compose version
