@@ -48,7 +48,6 @@ pipeline {
                 sh 'docker compose run --rm artisan cache:clear'
                 sh 'docker compose run --rm artisan config:clear'
                 sh 'cat ./src/.env'
-                sh 'sleep 300'
                 sh 'docker compose run --rm artisan migrate'
                 sh 'docker compose run --rm artisan storage:link'
             }
