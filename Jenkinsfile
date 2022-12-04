@@ -38,11 +38,12 @@ pipeline {
                 sh 'docker compose run --rm composer install'
             }
         }
-        stage("Populate .env file") {
+        stage("Run laravel artisans") {
             steps {
-                dir("/var/lib/jenkins/workspace/envs/laravel-test") {
-                    fileOperations([fileCopyOperation(excludes: '', flattenFiles: true, includes: '.env', targetLocation: "${WORKSPACE}")])
-                }
+                sh 'docker compose exec cp .env.example .env'
+                sh 'docker compose run --rm artisan key:generate'
+                sh 'docker compose run --rm artisan migrate'
+                sh 'docker compose run --rm artisan storage:link'
             }
         }              
         stage("Run Tests") {
