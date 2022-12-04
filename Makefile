@@ -12,5 +12,5 @@ export USER
 
 # docker-compose down --rmi all --remove-orphans && docker-compose up --force-recreate
 up:
-	docker-compose up -d --no-cache	
+	docker-compose up -d	
 	
