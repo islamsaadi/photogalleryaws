@@ -40,10 +40,10 @@ pipeline {
         }
         stage("Run laravel artisans") {
             steps {
-                sh 'cp .env.example .env'
-                sh 'docker compose run --rm artisan key:generate'
-                sh 'docker compose run --rm artisan migrate'
-                sh 'docker compose run --rm artisan storage:link'
+                sh 'cp ./src/.env.example ./src/.env'
+                sh 'docker-compose exec app site artisan key:generate'
+                sh 'docker-compose exec app site artisan migrate'
+                sh 'docker-compose exec app site artisan storage:link'
             }
         }              
         stage("Run Tests") {
