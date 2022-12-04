@@ -2,6 +2,7 @@ version: '3'
 
 networks:
   laravel:
+    driver: bridge
 
 services:
   site:
