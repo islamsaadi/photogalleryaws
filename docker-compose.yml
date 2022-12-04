@@ -15,14 +15,12 @@ services:
     depends_on:
       - php
       - mysql
-    networks:
-      - laravel
   mysql:
     image: mysql:5.7
     restart: unless-stopped
     tty: true
     ports:
-      - "3306:3306"
+      - "3306"
     environment:
       MYSQL_DATABASE: homestead
       MYSQL_USER: homestead
@@ -44,8 +42,7 @@ services:
       - ./dockerfiles/php/upload.ini:/usr/local/etc/php/php.ini
     ports:
       - "8888:80"
-    networks:
-      - laravel
+
   php:
     build:
       context: .
@@ -59,8 +56,7 @@ services:
       - ./src:/var/www/html
     ports:
       - "9000:9000"
-    networks:
-      - laravel
+
   composer:
     image: composer:latest
     volumes:
@@ -68,8 +64,6 @@ services:
     working_dir: /var/www/html
     depends_on:
       - php
-    networks:
-      - laravel
   npm:
     image: node:14.8
     volumes:
@@ -91,5 +85,3 @@ services:
       - mysql
     working_dir: /var/www/html
     entrypoint: ['php', '/var/www/html/artisan']
-    networks:
-      - laravel
