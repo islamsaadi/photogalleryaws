@@ -52,8 +52,9 @@ pipeline {
                 sh 'echo DB_USERNAME=${DB_USERNAME} >> ./src/.env'
                 sh 'echo DB_DATABASE=${DB_DATABASE} >> ./src/.env'
                 sh 'echo DB_PASSWORD=${DB_PASSWORD} >> ./src/.env'
-                sh 'cat ./src/.env'
                 sh 'docker compose run --rm artisan key:generate'
+                sh 'echo ${DB_USERNAME}'
+                sh 'cat ./src/.env'
                 sh 'docker compose run --rm artisan migrate'
                 sh 'docker compose run --rm artisan storage:link'
             }
