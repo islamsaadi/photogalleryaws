@@ -10,5 +10,7 @@ export UID
 export GID
 export USER
 
+# docker-compose up -d --no-cache
 up:
-	docker-compose up -d
+	docker-compose down --rmi all --remove-orphans && docker-compose up --force-recreate
+	
