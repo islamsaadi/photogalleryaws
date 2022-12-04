@@ -46,8 +46,8 @@ pipeline {
                 sh 'cat ./src/.env'
                 sh 'docker compose run --rm artisan cache:clear'
                 sh 'docker compose run --rm artisan config:clear'
-                 sh 'cat ./src/.env'
-                sh 'docker compose run --rm artisan migrate'
+                sh 'cat ./src/.env'
+                sh 'docker-compose exec php php artisan migrate'
                 sh 'docker compose run --rm artisan storage:link'
             }
         }              
