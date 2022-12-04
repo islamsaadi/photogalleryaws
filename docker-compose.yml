@@ -42,7 +42,6 @@ services:
         - UID=${UID:-1000}
         - GID=${GID:-1000}
         - USER=${USER:-islamsaadi}
-    tty: true
     volumes:
       - ./src:/var/www/html
     ports:
@@ -69,7 +68,6 @@ services:
         - UID=${UID:-1000}
         - GID=${GID:-1000}
         - USER=${USER:-islamsaadi}
-    tty: true
     volumes:
       - ./src:/var/www/html
     depends_on:
