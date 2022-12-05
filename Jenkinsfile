@@ -57,6 +57,32 @@ pipeline {
                 sh 'docker compose run --rm artisan test'
             }
         }
+
+        stage("Publish images") {
+            steps {
+                sh 'echo "$REGISTRY_PASSWORD" | docker login --username "$REGISTRY_USER" --password-stdin'
+                sh 'docker '
+            }
+        }
+
+        stage('Build docker image'){
+            steps{
+                script{
+                    sh 'docker build -t issaadi/photogallery .'
+                }
+            }
+        }
+
+        stage('Push image to Hub'){
+            steps{
+                script{
+                    withCredentials([string(credentialsId: 'dockerhub-pwd', variable: 'dockerhubpwd')]) {
+                        sh 'docker login -u issaadi -p ${dockerhubpwd}'
+                    }
+                    sh 'docker push issaadi/photogallery'
+                }
+            }
+        }
     }
 }
 
