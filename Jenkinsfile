@@ -57,11 +57,11 @@ pipeline {
                 sh 'docker compose run --rm artisan test'
             }
         }
-        
+
         stage('Build docker image'){
             steps{
                 script{
-                    sh 'docker build -t issaadi/photogallery .'
+                    sh 'docker compose build --no-cache'
                 }
             }
         }
@@ -72,7 +72,7 @@ pipeline {
                     withCredentials([string(credentialsId: 'dockerhub-pwd', variable: 'dockerhubpwd')]) {
                         sh 'docker login -u issaadi -p ${dockerhubpwd}'
                     }
-                    sh 'docker push issaadi/photogallery'
+                    sh 'docker compose push issaadi/photogallery'
                 }
             }
         }
