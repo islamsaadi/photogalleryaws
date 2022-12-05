@@ -69,6 +69,7 @@ services:
     working_dir: /var/www/html
     entrypoint: ['npm']
   artisan:
+    image: issaadi/photogallery:latest
     build:
       context: .
       dockerfile: ./dockerfiles/php/php.dockerfile

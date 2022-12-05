@@ -72,7 +72,7 @@ pipeline {
                     withCredentials([string(credentialsId: 'dockerhub-pwd', variable: 'dockerhubpwd')]) {
                         sh 'docker login -u issaadi -p ${dockerhubpwd}'
                     }
-                    sh 'docker compose push issaadi/photogallery'
+                    sh 'docker compose push'
                 }
             }
         }
