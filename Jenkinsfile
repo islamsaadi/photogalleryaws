@@ -103,12 +103,12 @@ pipeline {
                 SSH_PRIVATE_KEY = credentials("aws-ec2")
             }       
             steps {
-                sh 'ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} ec2-user@52.2.192.244 docker compose down \
-                && cd photogalleryaws \
+                sh 'ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} ec2-user@52.2.192.244 cd photogalleryaws \
+                && docker compose down \
                 && git pull origin main \
                 && docker pull issaadi/photogallery-php8.1.5:latest \
                 && docker pull issaadi/photogallery-artisan:latest \
-                && docker compose -f docker-compose.prod.yml  up -d --force-recreate \
+                && docker compose -f docker-compose.prod.yml up -d --force-recreate \
                 && docker compose run --rm composer install \
                 && cp ./src/.env.example ./src/.env \
                 && echo DB_HOST=${DB_HOST} >> .env \
