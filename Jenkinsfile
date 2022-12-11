@@ -107,6 +107,8 @@ pipeline {
                 && docker compose down \
                 && whoami \
                 && ssh -vvv git@github.com \
+                && eval `ssh-agent -s` \
+                && ssh-add ~/.ssh/photogalleryaws
                 && git pull origin main \
                 && docker pull issaadi/photogallery-php8.1.5:latest \
                 && docker pull issaadi/photogallery-artisan:latest \
