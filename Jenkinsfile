@@ -21,6 +21,7 @@ pipeline {
             steps {
                 script {
                     try {
+                        sh 'docker compose down'
                         sh 'docker system prune -a -y'
                         sh 'docker rm -f $(docker ps -a -q)'
                     } catch (Exception e) {
