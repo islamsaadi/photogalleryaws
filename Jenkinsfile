@@ -58,10 +58,11 @@ pipeline {
             }          
             steps {
                 sh 'cp ./src/.env.example ./src/.env'
-                sh 'echo DB_HOST=${DB_HOST} >> .env'
-                sh 'echo DB_USERNAME=${DB_USERNAME} >> .env'
-                sh 'echo DB_DATABASE=${DB_DATABASE} >> .env'
-                sh 'echo DB_PASSWORD=${DB_PASSWORD} >> .env'
+                sh 'echo DB_HOST=${DB_HOST} >> ./src/.env'
+                sh 'echo DB_USERNAME=${DB_USERNAME} >> ./src/.env'
+                sh 'echo DB_DATABASE=${DB_DATABASE} >> ./src/.env'
+                sh 'echo DB_PASSWORD=${DB_PASSWORD} >> ./src/.env'
+                sh 'cat ./src/.env'
                 sh 'docker compose run --rm artisan key:generate'
                 sh 'docker compose run --rm artisan cache:clear'
                 sh 'docker compose run --rm artisan config:clear'
