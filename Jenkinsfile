@@ -33,6 +33,7 @@ pipeline {
                         sh 'docker system prune -a -y'
                         sh 'docker stop $(docker ps -a -q)'
                         sh 'docker rm -f $(docker ps -a -q)'
+                        sh 'service docker restart'
                     } catch (Exception e) {
                         echo 'No running container to clear up...'
                     }
