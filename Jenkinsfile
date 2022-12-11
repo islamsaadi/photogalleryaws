@@ -92,7 +92,7 @@ pipeline {
                     sh 'docker compose push'
                 }
             }
-        },
+        }
         stage("Deploy app to server") {
             environment {
                 DB_HOST = credentials("laravel-db-host")
@@ -120,6 +120,19 @@ pipeline {
                 && docker compose run --rm artisan migrate \
                 && docker compose run --rm artisan storage:link'
             }
+        }
+    }
+
+    post {
+        success {
+            echo "Success"
+        }
+        failure {
+            echo "FAILED"
+        }
+        always {
+            sh 'docker compose down'
+            sh 'docker compose ps'
         }
     }
 }
