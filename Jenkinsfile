@@ -122,18 +122,5 @@ pipeline {
             }
         }
     }
-
-    post {
-        success {
-            echo "Success"
-        }
-        failure {
-            echo "FAILED"
-        }
-        always {
-            sh 'docker compose down'
-            sh 'docker compose ps'
-        }
-    }
 }
 
