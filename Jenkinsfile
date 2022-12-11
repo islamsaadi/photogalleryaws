@@ -17,11 +17,18 @@ pipeline {
                 '''
             }
         }
+        stage("Down running container") {
+            steps {
+                script {
+                    sh 'docker compose down'
+                    sh 'docker ps'
+                }
+            }
+        }
         stage("Clear all running docker containers") {
             steps {
                 script {
                     try {
-                        sh 'docker compose down'
                         sh 'docker system prune -a -y'
                         sh 'docker rm -f $(docker ps -a -q)'
                     } catch (Exception e) {
