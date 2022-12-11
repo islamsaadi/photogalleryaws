@@ -49,14 +49,22 @@ pipeline {
                 sh 'docker compose run --rm composer install'
             }
         }
-        stage("Run laravel artisans") {            
+        stage("Run laravel artisans") {  
+            environment {
+                DB_HOST = credentials("laravel-db-host")
+                DB_DATABASE = credentials("laravel-database")
+                DB_USERNAME = credentials("laravel-db-user")
+                DB_PASSWORD = credentials("laravel-db-password")
+            }          
             steps {
                 sh 'cp ./src/.env.example ./src/.env'
+                sh 'echo DB_HOST=${DB_HOST} >> .env'
+                sh 'echo DB_USERNAME=${DB_USERNAME} >> .env'
+                sh 'echo DB_DATABASE=${DB_DATABASE} >> .env'
+                sh 'echo DB_PASSWORD=${DB_PASSWORD} >> .env'
                 sh 'docker compose run --rm artisan key:generate'
-                sh 'cat ./src/.env'
                 sh 'docker compose run --rm artisan cache:clear'
                 sh 'docker compose run --rm artisan config:clear'
-                sh 'cat ./src/.env'
                 sh 'docker compose run --rm artisan migrate'
                 sh 'docker compose run --rm artisan storage:link'
             }
@@ -84,6 +92,43 @@ pipeline {
                     sh 'docker compose push'
                 }
             }
+        }
+    }
+
+    post {
+        success {
+            environment {
+                DB_HOST = credentials("laravel-db-host")
+                DB_DATABASE = credentials("laravel-database")
+                DB_USERNAME = credentials("laravel-db-user")
+                DB_PASSWORD = credentials("laravel-db-password")
+                SSH_PRIVATE_KEY = credentials('aws-ec2')
+            }       
+            script {
+                sh 'ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} ec2-user@52.2.192.244 docker compose down 
+                && cd photogalleryaws
+                && docker pull issaadi/photogallery-php8.1.5:latest 
+                && docker pull issaadi/photogallery-artisan:latest
+                && docker compose -f docker-compose.prod.yml  up -d --force-recreate
+                && docker compose run --rm composer install
+                && cp ./src/.env.example ./src/.env
+                && echo DB_HOST=${DB_HOST} >> .env
+                && echo DB_USERNAME=${DB_USERNAME} >> .env
+                && echo DB_DATABASE=${DB_DATABASE} >> .env
+                && echo DB_PASSWORD=${DB_PASSWORD} >> .env
+                && docker compose run --rm artisan key:generate
+                && docker compose run --rm artisan cache:clear
+                && docker compose run --rm artisan config:clear
+                && docker compose run --rm artisan migrate
+                && docker compose run --rm artisan storage:link'
+            }
+        }
+        failure {
+            echo "I FAILED"
+        }
+        always {
+            sh 'docker compose down'
+            sh 'docker compose ps'
         }
     }
 }
