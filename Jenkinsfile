@@ -105,8 +105,8 @@ pipeline {
             steps {
                 sh 'ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} ec2-user@52.2.192.244 cd photogalleryaws \
                 && docker compose down \
-                && whoami
-                && ssh -vvv git@github.com
+                && whoami \
+                && ssh -vvv git@github.com \
                 && git pull origin main \
                 && docker pull issaadi/photogallery-php8.1.5:latest \
                 && docker pull issaadi/photogallery-artisan:latest \
