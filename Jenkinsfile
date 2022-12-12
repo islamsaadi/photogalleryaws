@@ -101,6 +101,7 @@ pipeline {
                 DB_USERNAME = credentials("laravel-db-user")
                 DB_PASSWORD = credentials("laravel-db-password")
                 SSH_PRIVATE_KEY = credentials("aws-ec2")
+                DOCKER_HUB_PASS = credentials("dockerhubpwd")
             }
             steps {
                 script {
@@ -110,10 +111,10 @@ pipeline {
                                 && whoami \
                                 && pwd \
                                 && uname -v \
-                                && ssh -vvv git@github.com \
-                                && eval `ssh-agent -s` \
+                                && eval \`ssh-agent -s\` \
                                 && ssh-add ~/.ssh/photogalleryaws \
                                 && git pull origin main \
+                                && docker login -u issaadi -p ${DOCKER_HUB_PASS} \
                                 && docker pull issaadi/photogallery-php8.1.5:latest \
                                 && docker pull issaadi/photogallery-artisan:latest \
                                 && docker compose -f docker-compose.prod.yml up -d --force-recreate \
