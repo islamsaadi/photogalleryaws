@@ -111,7 +111,7 @@ pipeline {
                                 && whoami \
                                 && pwd \
                                 && uname -v \
-                                && eval \`ssh-agent -s\` \
+                                && eval ssh-agent -s \
                                 && ssh-add ~/.ssh/photogalleryaws \
                                 && git pull origin main \
                                 && docker login -u issaadi -p ${DOCKER_HUB_PASS} \
