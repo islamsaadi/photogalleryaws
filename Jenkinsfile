@@ -100,10 +100,11 @@ pipeline {
                 DB_DATABASE = credentials("laravel-database")
                 DB_USERNAME = credentials("laravel-db-user")
                 DB_PASSWORD = credentials("laravel-db-password")
+                SSH_PRIVATE_KEY = credentials("aws-ec2")
             }       
             script {
                 sshagent(credentials: ['aws-ec2']) {
-                     sh 'ssh -o StrictHostKeyChecking=no -i ${keyFileVariable} ${usernameVariable}@52.2.192.244 cd photogalleryaws \
+                     sh 'ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} ec2-user@52.2.192.244 cd photogalleryaws \
                             && docker compose down \
                             && whoami \
                             && pwd \
