@@ -101,7 +101,7 @@ pipeline {
                 DB_USERNAME = credentials("laravel-db-user")
                 DB_PASSWORD = credentials("laravel-db-password")
                 SSH_PRIVATE_KEY = credentials("aws-ec2")
-                DOCKER_HUB_PASS = credentials("dockerhubpwd")
+                DOCKER_HUB_PASS = credentials("dockerhub-pwd")
             }
             steps {
                 script {
