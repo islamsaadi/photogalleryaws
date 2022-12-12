@@ -100,30 +100,33 @@ pipeline {
                 DB_DATABASE = credentials("laravel-database")
                 DB_USERNAME = credentials("laravel-db-user")
                 DB_PASSWORD = credentials("laravel-db-password")
-                SSH_PRIVATE_KEY = credentials("aws-ec2")
             }       
             steps {
-                sh 'ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} ec2-user@52.2.192.244 cd photogalleryaws \
-                && docker compose down \
-                && whoami \
-                && ssh -vvv git@github.com \
-                && eval `ssh-agent -s` \
-                && ssh-add ~/.ssh/photogalleryaws \
-                && git pull origin main \
-                && docker pull issaadi/photogallery-php8.1.5:latest \
-                && docker pull issaadi/photogallery-artisan:latest \
-                && docker compose -f docker-compose.prod.yml up -d --force-recreate \
-                && docker compose run --rm composer install \
-                && cp ./src/.env.example ./src/.env \
-                && echo DB_HOST=${DB_HOST} >> .env \
-                && echo DB_USERNAME=${DB_USERNAME} >> .env \
-                && echo DB_DATABASE=${DB_DATABASE} >> .env \
-                && echo DB_PASSWORD=${DB_PASSWORD} >> .env \
-                && docker compose run --rm artisan key:generate \
-                && docker compose run --rm artisan cache:clear \
-                && docker compose run --rm artisan config:clear \
-                && docker compose run --rm artisan migrate \
-                && docker compose run --rm artisan storage:link'
+                withCredentials([sshUserPrivateKey(credentialsId: 'aws-ec2', keyFileVariable: 'aws-ec2', usernameVariable: 'ec2-user')]) {
+                    sh 'ssh -o StrictHostKeyChecking=no -i ${aws-ec2} ${usernameVariable}@52.2.192.244 cd photogalleryaws \
+                    && docker compose down \
+                    && whoami \
+                    && pwd \
+                    && uname -v \
+                    && ssh -vvv git@github.com \
+                    && eval `ssh-agent -s` \
+                    && ssh-add ~/.ssh/photogalleryaws \
+                    && git pull origin main \
+                    && docker pull issaadi/photogallery-php8.1.5:latest \
+                    && docker pull issaadi/photogallery-artisan:latest \
+                    && docker compose -f docker-compose.prod.yml up -d --force-recreate \
+                    && docker compose run --rm composer install \
+                    && cp ./src/.env.example ./src/.env \
+                    && echo DB_HOST=${DB_HOST} >> .env \
+                    && echo DB_USERNAME=${DB_USERNAME} >> .env \
+                    && echo DB_DATABASE=${DB_DATABASE} >> .env \
+                    && echo DB_PASSWORD=${DB_PASSWORD} >> .env \
+                    && docker compose run --rm artisan key:generate \
+                    && docker compose run --rm artisan cache:clear \
+                    && docker compose run --rm artisan config:clear \
+                    && docker compose run --rm artisan migrate \
+                    && docker compose run --rm artisan storage:link'
+                }
             }
         }
     }
