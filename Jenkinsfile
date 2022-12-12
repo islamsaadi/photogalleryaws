@@ -105,7 +105,7 @@ pipeline {
             steps {
                 script {
                     sshagent(credentials: ['aws-ec2']) {
-                        sh 'ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} ec2-user@52.2.192.244 whoami && cd photogalleryaws \
+                        sh 'ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} ec2-user@52.2.192.244 "whoami && cd photogalleryaws \
                                 && docker compose down \
                                 && whoami \
                                 && pwd \
@@ -127,7 +127,7 @@ pipeline {
                                 && docker compose run --rm artisan cache:clear \
                                 && docker compose run --rm artisan config:clear \
                                 && docker compose run --rm artisan migrate \
-                                && docker compose run --rm artisan storage:link'
+                                && docker compose run --rm artisan storage:link"'
                     }
                 }
             }    
